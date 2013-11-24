@@ -130,7 +130,6 @@ REQUEST
 }
 
 RESPONSE 200
-
 {
 	id : "68e48970-54f7-11e3-8f96-0800200c9a66",
 	title : "Mr",
@@ -166,7 +165,6 @@ REQUEST
 }
 
 RESPONSE 200
-
 {
 	id : "68e48970-54f7-11e3-8f96-0800200c9a66",
 	title : "Mr",

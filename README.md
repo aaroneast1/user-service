@@ -3,7 +3,7 @@ user-service
 
 User service allows you to register a user, register interest, update, delete and retrieve users
 
-`
+```javascript
 
 GET 
 /user-service/68e48970-54f7-11e3-8f96-0800200c9a66
@@ -24,4 +24,4 @@ RESPONSE
 	mailingList : true
 }
 
-`
+```

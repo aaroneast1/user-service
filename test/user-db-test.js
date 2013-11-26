@@ -54,9 +54,15 @@ var dbSetup = function( connection, dbName, tableName, callback ){
 };
 
 var connection = null;
-var dbName = "user_service_test";
-var tableName = "user";
+
 var userDb = null;
+
+var options = {
+	dbName : "user_service_test",
+	tableName : "user",
+	host : "localhost",
+	port : 28015
+}
 
 
 // Test suite start
@@ -68,24 +74,25 @@ describe("user-db.js tests", function(){
 	before(function(done){
 		this.timeout(5000);
 		
-		r.connect( {host: 'localhost', port: 28015}, function(err, conn) {
+		r.connect( options, function(err, conn) {
 		  if (err){
-		  	throw new Error("Unable to connect to database. " + err.stack());
+		  	throw new Error("Unable to connect to database. " + err);
 		  }
 		  connection = conn;
 
-		  dbSetup( connection, dbName, tableName, function(){
-		  	createTable(connection, dbName, tableName, function(){
-		  		userDb = require("../lib/user-db.js").createInstance(r,connection, dbName, tableName);
-		  		done();
+		  dbSetup( connection, options.dbName, options.tableName, function(){
+		  	createTable(connection, options.dbName, options.tableName, function(){
+		  		userDb = require("../lib/user-db.js").createInstance(options, done);
 		  	});
 		  });
 		});
+
+		
 	});
 
 	after(function(done){
 		this.timeout(5000);
-		dropDb(connection, dbName, done);		
+		dropDb(connection, options.dbName, done);		
 	});
 
 
@@ -106,7 +113,7 @@ describe("user-db.js tests", function(){
 		};
 
 		before(function(done){
-			r.db(dbName).table(tableName).delete().run(connection, function(err, result) {
+			r.db(options.dbName).table(options.tableName).delete().run(connection, function(err, result) {
 				if (err) throw err;
 				done();
 			});
@@ -229,6 +236,7 @@ describe("user-db.js tests", function(){
 			(function(){
 			  userDb.deleteUser( "1", null );
 			}).should.throwError("Must supply a valid callback.");
+
 		});
 
 

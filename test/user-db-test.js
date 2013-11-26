@@ -135,6 +135,25 @@ describe("user-db.js tests", function(){
 			});
 		});
 
+
+		it("Fail to register on empty user",function(){
+
+			(function(){
+			  userDb.registerUser( null );
+			}).should.throwError("Cannot save an empty user.");
+
+		});
+
+
+		it("Fail to register on empty callback",function(){
+
+			(function(){
+			  userDb.registerUser( user1, null );
+			}).should.throwError("Must supply a valid callback.");
+
+		});
+
+
 		it("Successfully retrieve a user by userId",function( done ){
 
 			userDb.registerUser( user1, function(err, result){
@@ -164,6 +183,22 @@ describe("user-db.js tests", function(){
 		});
 
 
+		it("Fail to retrieve a user with an empty userId",function(){
+
+			(function(){
+			  userDb.getUserById( null );
+			}).should.throwError("Cannot retrieve a user without a valid userId.");
+		});
+
+
+		it("Fail to register on empty callback",function(){
+
+			(function(){
+			  userDb.getUserById( "1", null );
+			}).should.throwError("Must supply a valid callback.");
+		});
+
+
 		it("Successfully delete a user by userId",function( done ){
 
 			userDb.registerUser( user1, function(err, result){
@@ -181,7 +216,23 @@ describe("user-db.js tests", function(){
 		});
 
 
-		it("Successfully updated a user by userId",function( done ){
+		it("Fail to delete a user with an empty userId",function(){
+
+			(function(){
+			  userDb.deleteUser( null );
+			}).should.throwError("Cannot delete a user without a valid userId.");
+		});
+
+
+		it("Fail to delete on empty callback",function(){
+
+			(function(){
+			  userDb.deleteUser( "1", null );
+			}).should.throwError("Must supply a valid callback.");
+		});
+
+
+		it("Successfully update a user by userId",function( done ){
 
 			userDb.registerUser( user1, function(err, result){
 				if(err) throw err;
@@ -200,6 +251,30 @@ describe("user-db.js tests", function(){
 					done();
 				});
 			});
+		});
+
+
+		it("Fail to update a user with an empty userId",function(){
+
+			(function(){
+			  userDb.updateUser( null );
+			}).should.throwError("Cannot update a user without a valid userId.");
+		});
+
+
+		it("Fail to update on empty callback",function(){
+
+			(function(){
+			  userDb.updateUser( "1", null );
+			}).should.throwError("Cannot update an empty user.");
+		});
+
+
+		it("Fail to update on empty callback",function(){
+
+			(function(){
+			  userDb.updateUser( "1", {}, null );
+			}).should.throwError("Must supply a valid callback.");
 		});
 
 

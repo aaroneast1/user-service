@@ -32,18 +32,6 @@ var dropDb = function( connection, dbName, callback ){
   });
 };
 
-// NOT USED
-// var dropTables = function( connection, dbName ){
-//   r.tableList().run(connection, function( err, tables ){
-//     if (err) return err;
-  
-//     _.each(tables, function( t ){
-//       r.db(dbName).tableDrop(t).run(connection, errorCallback);
-//     });
-
-//   });
-// };
-
 var dbSetup = function( connection, dbName, tableName, callback ){
   r.dbList().run(connection, function( err, dbs ){
     if(_.contains(dbs, dbName)){
@@ -65,11 +53,8 @@ var options = {
 }
 
 
-// Test suite start
+describe("user-db.js tests ", function(){	
 
-describe("user-db.js tests", function(){
-
-	
 
 	before(function(done){
 		this.timeout(5000);
@@ -198,7 +183,7 @@ describe("user-db.js tests", function(){
 		});
 
 
-		it("Fail to register on empty callback",function(){
+		it("Fail to retrieve a user with empty callback",function(){
 
 			(function(){
 			  userDb.getUserById( "1", null );
@@ -270,7 +255,7 @@ describe("user-db.js tests", function(){
 		});
 
 
-		it("Fail to update on empty callback",function(){
+		it("Fail to update with an empty user",function(){
 
 			(function(){
 			  userDb.updateUser( "1", null );

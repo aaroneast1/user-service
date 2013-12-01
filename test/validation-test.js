@@ -1,8 +1,7 @@
 var underTest = require("../lib/validation.js"),
 	assert = require("assert"),
 	_ = require("underscore"),
-	should = require("should"),
-	Util = require("../lib/util.js");
+	should = require("should");
 
 
 
@@ -20,65 +19,50 @@ describe("Object field validation ", function(){
 				lastname : "East"
 			};
 
-			var fields = [
-				{
-					key : 'email',
+			var validationCriteria = {
+				name : {
 					type: "string", 
 					required : true,
-					minLength : 5,
-					maxLength : 200
-				},
-				{
-					key : 'mobile',
-					type : "string",
-					required : true
-				},
-				{
-					key : 'age',
-					type : "number",
-					required : true
+					minLength : 10,
+					maxLength : 100
 				}
-			];
+			};
 
+			var strictValidationOn = true;
 
 			// act 
-			var errors = underTest.validate( itemToValidate, fields, true );
+			var errors = underTest.validate( itemToValidate, validationCriteria, strictValidationOn );
+
 
 			// assert
 			errors.should.be.an.Array;
-			errors.should.have.length(5);
+			errors.should.have.length(3);
 			_.findWhere(errors, {key : 'firstname'}).should.include({key : 'firstname', errors : ['unknown']});
 			_.findWhere(errors, {key : 'lastname'}).should.include({key : 'lastname', errors : ['unknown']});
+			_.findWhere(errors, {key : 'name'}).should.include({key : 'name', errors : ['required', 'invalid_type_string', 'less_than_minimum_length']});
+
 		});
 
 
 		it("validation should fail when required fields are not present", function(){
 			
 			// arrange
-			var itemToValidate = {
-				firstname : "Aaron",
-				lastname : "East"
-			};
+			var itemToValidate = {};
 
-			var fields = [
-				{
-					key : 'email',
+			var fields = {
+				name : {
 					type: "string", 
 					required : true,
-					minLength : 5,
-					maxLength : 200
 				},
-				{
-					key : 'mobile',
+				mobile : {
 					type : "string",
 					required : true
 				},
-				{
-					key : 'age',
+				age : {
 					type : "number",
 					required : true
 				}
-			];
+			};
 
 
 			// act 
@@ -86,12 +70,10 @@ describe("Object field validation ", function(){
 
 			// assert
 			errors.should.be.an.Array;
-			errors.should.have.length(5);
-			_.findWhere(errors, {key : 'firstname'}).should.include({key : 'firstname', errors : ['unknown']});
-			_.findWhere(errors, {key : 'lastname'}).should.include({key : 'lastname', errors : ['unknown']});
-			_.findWhere(errors, {key : 'email'}).should.include({key : 'email', errors : ['required']});
-			_.findWhere(errors, {key : 'mobile'}).should.include({key : 'mobile', errors : ['required']});
-			_.findWhere(errors, {key : 'age'}).should.include({key : 'age', errors : ['required']});
+			errors.should.have.length(3);
+			_.findWhere(errors, {key : 'name'}).should.include({key : 'name', errors : ['required','invalid_type_string']});
+			_.findWhere(errors, {key : 'mobile'}).should.include({key : 'mobile', errors : ['required','invalid_type_string']});
+			_.findWhere(errors, {key : 'age'}).should.include({key : 'age', errors : ['required','invalid_type_number']});
 		});
 
 
@@ -107,39 +89,34 @@ describe("Object field validation ", function(){
 
 			};
 
-			var fields = [
-				{
-					key : 'firstname',
+			var fields = {
+				firstname : {
 					type: "string", 
 					required : true,
 					minLength : 1,
 					maxLength : 50
 				},
-				{
-					key : 'lastname',
+				lastname : {
 					type: "string", 
 					required : true,
 					minLength : 2,
 					maxLength : 50
 				},
-				{
-					key : 'email',
+				email : {
 					type: "string", 
 					required : true,
 					minLength : 5,
 					maxLength : 200
 				},
-				{
-					key : 'age',
+				age : {
 					type : "number",
 					required : true
 				},
-				{
-					key : 'male',
+				male : {
 					type : "boolean",
 					required : true
 				}
-			];
+			};
 
 
 			// act 
@@ -162,39 +139,34 @@ describe("Object field validation ", function(){
 				male : 1,
 			};
 
-			var fields = [
-				{
-					key : 'firstname',
+			var fields = {
+				firstname : {
 					type: "string", 
 					required : true,
 					minLength : 1,
 					maxLength : 50
 				},
-				{
-					key : 'lastname',
+				lastname : {
 					type: "string", 
 					required : true,
 					minLength : 2,
 					maxLength : 50
 				},
-				{
-					key : 'email',
+				email : {
 					type: "string", 
 					required : true,
 					minLength : 5,
 					maxLength : 200
 				},
-				{
-					key : 'age',
+				age : {
 					type : "number",
 					required : true
 				},
-				{
-					key : 'male',
+				male : {
 					type : "boolean",
 					required : true
 				}
-			];
+			};
 
 
 			// act 
@@ -204,14 +176,14 @@ describe("Object field validation ", function(){
 			errors.should.be.an.Array;
 			errors.should.have.length(3);
 
-			_.findWhere(errors, {key : 'email'}).should.include({key : 'email', errors : ['not_string']});
-			_.findWhere(errors, {key : 'age'}).should.include({key : 'age', errors : ['not_number']});
-			_.findWhere(errors, {key : 'male'}).should.include({key : 'male', errors : ['not_boolean']});
+			_.findWhere(errors, {key : 'email'}).should.include({key : 'email', errors : ['invalid_type_string', 'less_than_minimum_length']});
+			_.findWhere(errors, {key : 'age'}).should.include({key : 'age', errors : ['invalid_type_number']});
+			_.findWhere(errors, {key : 'male'}).should.include({key : 'male', errors : ['invalid_type_boolean']});
 
 		});
 
 
-		xit("unsuccessful validation firstname too long, surname too short", function(){
+		it("unsuccessful validation firstname too long, surname too short", function(){
 			
 			// arrange
 			var itemToValidate = {
@@ -219,22 +191,20 @@ describe("Object field validation ", function(){
 				lastname : "1"
 			};
 
-			var fields = [
-				{
-					key : 'firstname',
+			var fields = {
+				firstname : {
 					type: "string", 
 					required : true,
 					minLength : 1,
 					maxLength : 50
 				},
-				{
-					key : 'lastname',
+				lastname : {
 					type: "string", 
 					required : true,
 					minLength : 2,
 					maxLength : 50
 				}
-			];
+			};
 
 
 			// act 
@@ -244,8 +214,8 @@ describe("Object field validation ", function(){
 			errors.should.be.an.Array;
 			errors.should.have.length(2);
 
-			_.findWhere(errors, {key : 'firstname'}).should.include({key : 'firstname', errors : ['not_max_length']});
-			_.findWhere(errors, {key : 'lastname'}).should.include({key : 'lastname', errors : ['not_min_length']});
+			_.findWhere(errors, {key : 'firstname'}).should.include({key : 'firstname', errors : ['greater_then_max_length']});
+			_.findWhere(errors, {key : 'lastname'}).should.include({key : 'lastname', errors : ['less_than_minimum_length']});
 
 		});		
 

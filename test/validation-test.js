@@ -1,4 +1,4 @@
-var underTest = require("../lib/validation.js"),
+var Validator = require("../lib/validation.js"),
 	assert = require("assert"),
 	_ = require("underscore"),
 	should = require("should");
@@ -6,6 +6,10 @@ var underTest = require("../lib/validation.js"),
 
 
 describe("Object field validation ", function(){
+
+	before(function(){
+
+	});
 
 
 	describe("for type; number, string, boolean and string minimum, maximum length", function(){
@@ -31,7 +35,8 @@ describe("Object field validation ", function(){
 			var strictValidationOn = true;
 
 			// act 
-			var errors = underTest.validate( itemToValidate, validationCriteria, strictValidationOn );
+			var underTest = Validator.create(validationCriteria, strictValidationOn);
+			var errors = underTest( itemToValidate );
 
 
 			// assert
@@ -49,7 +54,7 @@ describe("Object field validation ", function(){
 			// arrange
 			var itemToValidate = {};
 
-			var fields = {
+			var validationCriteria = {
 				name : {
 					type: "string", 
 					required : true,
@@ -64,9 +69,12 @@ describe("Object field validation ", function(){
 				}
 			};
 
+			var strictValidationOn = true;
+
 
 			// act 
-			var errors = underTest.validate( itemToValidate, fields, true );
+			var underTest = Validator.create(validationCriteria, strictValidationOn);
+			var errors = underTest( itemToValidate );
 
 			// assert
 			errors.should.be.an.Array;
@@ -89,7 +97,7 @@ describe("Object field validation ", function(){
 
 			};
 
-			var fields = {
+			var validationCriteria = {
 				firstname : {
 					type: "string", 
 					required : true,
@@ -118,9 +126,12 @@ describe("Object field validation ", function(){
 				}
 			};
 
+			var strictValidationOn = true;
+
 
 			// act 
-			var errors = underTest.validate( itemToValidate, fields, true );
+			var underTest = Validator.create(validationCriteria, strictValidationOn);
+			var errors = underTest( itemToValidate );
 
 			// assert
 			errors.should.be.an.Array;
@@ -139,7 +150,7 @@ describe("Object field validation ", function(){
 				male : 1,
 			};
 
-			var fields = {
+			var validationCriteria = {
 				firstname : {
 					type: "string", 
 					required : true,
@@ -168,9 +179,12 @@ describe("Object field validation ", function(){
 				}
 			};
 
+			var strictValidationOn = true;
+
 
 			// act 
-			var errors = underTest.validate( itemToValidate, fields, true );
+			var underTest = Validator.create(validationCriteria, strictValidationOn);
+			var errors = underTest( itemToValidate );
 
 			// assert
 			errors.should.be.an.Array;
@@ -191,7 +205,7 @@ describe("Object field validation ", function(){
 				lastname : "1"
 			};
 
-			var fields = {
+			var validationCriteria = {
 				firstname : {
 					type: "string", 
 					required : true,
@@ -206,9 +220,12 @@ describe("Object field validation ", function(){
 				}
 			};
 
+			var strictValidationOn = false;
+
 
 			// act 
-			var errors = underTest.validate( itemToValidate, fields, true );
+			var underTest = Validator.create(validationCriteria, strictValidationOn);
+			var errors = underTest( itemToValidate );
 
 			// assert
 			errors.should.be.an.Array;
